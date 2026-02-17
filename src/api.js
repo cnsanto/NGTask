@@ -34,3 +34,14 @@ export function getData(url) {
 
   return getSuspender(promise);
 }
+
+export function postData(url, data) {
+  const promise = fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then((response) => response.json());
+  return getSuspender(promise);
+}

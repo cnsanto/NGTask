@@ -1,5 +1,5 @@
 import { Posiciones } from "./posiciones";
-import { getData } from "./getData";
+import { getData } from "./api";
 import { Suspense } from "react";
 
 const base_url =
@@ -13,8 +13,8 @@ export function App() {
   const usuario = apiDataUsuario.read();
   const posiciones = apiDataPosiciones.read();
 
-  //const { data: usuario } = apiDataUsuario;
-  //const { data: posiciones } = getPosiciones();
+  console.log(posiciones);
+  console.log(usuario);
 
   return (
     <article className="container-fluid px-4 mt-5">
@@ -46,7 +46,7 @@ export function App() {
           </div>
           <div className="usuario-info">
             <div className="usuario-nombre">
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<div>Cargando...</div>}>
                 {usuario?.firstName} {usuario?.lastName}
               </Suspense>
             </div>
@@ -55,9 +55,15 @@ export function App() {
         </div>
       </header>
       <main className="posiciones mt-5">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>Cargando...</div>}>
           {posiciones?.map((posicion) => (
-            <Posiciones key={posicion.id} title={posicion.title} />
+            <Posiciones
+              key={posicion.id}
+              jobId={posicion.id}
+              title={posicion.title}
+              candidateId={usuario.candidateId}
+              userUuid={usuario.uuid}
+            />
           ))}
         </Suspense>
       </main>
@@ -67,7 +73,12 @@ export function App() {
 
 /* 
 
-BASE_URL = "https://botfilter-h5ddh6dye8exb7ha.centralus-01.azurewebsites.net";
+{
+  "uuid": "tu uuid (del Step 2)",
+  "jobId": "id de la posición (del Step 3)",
+  "candidateId": "tu candidateId (del Step 2)",
+  "repoUrl": "https://github.com/tu-usuario/tu-repo"
+}
 
 1. GET a la API con mi mail: cnsanto@gmail.com
 GET {BASE_URL}/api/candidate/get-by-email?email=cnsanto@gmail.com
