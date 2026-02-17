@@ -60,9 +60,10 @@ export function App() {
             <Posiciones
               key={posicion.id}
               jobId={posicion.id}
-              title={posicion.title}
               candidateId={usuario.candidateId}
               userUuid={usuario.uuid}
+              applicationId={usuario.applicationId}
+              title={posicion.title}
             />
           ))}
         </Suspense>
@@ -70,65 +71,3 @@ export function App() {
     </article>
   );
 }
-
-/* 
-
-{
-  "uuid": "tu uuid (del Step 2)",
-  "jobId": "id de la posición (del Step 3)",
-  "candidateId": "tu candidateId (del Step 2)",
-  "repoUrl": "https://github.com/tu-usuario/tu-repo"
-}
-
-1. GET a la API con mi mail: cnsanto@gmail.com
-GET {BASE_URL}/api/candidate/get-by-email?email=cnsanto@gmail.com
-
-Respuesta (200):
-
-{
-  "uuid": "a1b2c3d4-...",
-  "candidateId": "a1b2c3d4",
-  "applicationId": "a1b2c3d4",
-  "firstName": "Jane",
-  "lastName": "Doe",
-  "email": "jane.doe@example.com"
-}
-
-2. Obtener lista de posiciones abiertas
-GET {BASE_URL}/api/jobs/get-list
-
-Respuesta (200):
-
-[
-  { "id": "4416372005", "title": "Fullstack developer" },
-  { "id": "9100000001", "title": "Head Chef" }
-]
-
-3. Crear componente en React que muestre un listado de las posiciones obtenidas en el paso anterior.
-Cada ítem debe incluir:
-* Titulo de la posicion (title)
-* Campo de input donde puedas ingresar la URL de tu repositorio de GitHub
-* Botón "Submit" para enviar la postulación
-
-4. Botón "Submit" -> debe llamar a la API con el siguiente body:
-
-POST {BASE_URL}/api/candidate/apply-to-job
-Content-Type: application/json
-Body:
-
-{
-  "uuid": "tu uuid (del Step 2)",
-  "jobId": "id de la posición (del Step 3)",
-  "candidateId": "tu candidateId (del Step 2)",
-  "repoUrl": "https://github.com/tu-usuario/tu-repo"
-}
-Campo	Valor
-uuid	Tu uuid obtenido en el Step 2
-jobId	El id de la posición desde la que hacés submit
-candidateId	Tu candidateId obtenido en el Step 2
-repoUrl	URL de tu repositorio de GitHub
-Respuesta exitosa (200):
-
-{ "ok": true }
-
-*/

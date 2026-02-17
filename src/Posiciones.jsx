@@ -1,9 +1,16 @@
 import { useState } from "react";
+import { applyToJob } from "./postData";
 
 const base_url =
   "https://botfilter-h5ddh6dye8exb7ha.centralus-01.azurewebsites.net";
 
-export function Posiciones({ title, jobId, candidateId, userUuid }) {
+export function Posiciones({
+  title,
+  jobId,
+  candidateId,
+  applicationId,
+  userUuid,
+}) {
   const [githubUrl, setGithubUrl] = useState("");
   const [isSending, setIsSending] = useState(false);
 
@@ -13,30 +20,28 @@ export function Posiciones({ title, jobId, candidateId, userUuid }) {
       uuid: userUuid,
       jobId: jobId,
       candidateId: candidateId,
+      //applicationId: applicationId, //no esta en el body especificado de la API
       repoUrl: githubUrl,
     };
     try {
-      const response = await fetch(base_url + "/api/candidate/apply-to-job", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        alert(`Te has postulado correctamente para ${title}`);
-        setGithubUrl("");
-      } else {
-        const errorText = await response.text();
-        alert(`Error en la postulación: ${errorText}`);
-      }
+      await applyToJob(payload, "/api/candidate/apply-to-job");
+      alert(`Te has postulado correctamente para ${title}`);
+      setGithubUrl("");
     } catch (error) {
-      alert(`Error inesperado: ${error.message}`);
+      alert(`Error en la postulación: ${error.message}`);
     } finally {
       setIsSending(false);
     }
   };
+
+  /** el body tiene que ser:
+   * {
+   * "uuid": "tu uuid (del Step 2)",
+   * "jobId": "id de la posición (del Step 3)",
+   * "candidateId": "tu candidateId (del Step 2)",
+   * "repoUrl": "https://github.com/tu-usuario/tu-repo"
+   * }
+   */
 
   return (
     <article className="posicion-card">
